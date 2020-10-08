@@ -5,6 +5,7 @@
 #include <map>
 using namespace std;
 
+
 class Point
 {
 public:
@@ -22,19 +23,18 @@ public:
     int x;
     int y;
 };
-
 class MyData
 {
 public:
+
     void ReadData();
     void SaveData();
     void PrintData(vector<vector<int> > num);
     void PrintDataLie(vector<vector<int> > num);
 
-    void InitialHash();
+
     void CopyNum(); // Convert rows and columns vector
 
-    void CreateHash(); 
     void CreateMap();  //Initialize the Red-Black Tree Map
 
     int Search(int x, int y);              //Use Hashing to search two-dimensional data tables
@@ -80,22 +80,22 @@ int main()
             break;
         case 4:
         {
-            cout << "Please enter the row and column where the data is modified：";
-            int height, width;
-            cin >> height >> width;
+            cout << "Please enter the row and column where the data is modified:";
+            int row, col;
+            cin >> row >> col;
             cout << "Please enter the revised data:";
             int newNum;
             cin >> newNum;
-            res.Update(height - 1, width - 1, newNum);
+            res.Update(row - 1, col - 1, newNum);
             cout << "Successfully modified! "<< endl;
         }
         break;
         case 5:
         {
             cout << "Please enter the row and column of the  data you want search:";
-            int height, width;
-            cin >> height >> width;
-            cout << "The data you want to find is:" << res.Search(height - 1, width - 1) << endl;
+            int row, col;
+            cin >> row >> col;
+            cout << "The data you want to find is:" << res.Search(row - 1, col - 1) << endl;
         }
         break;
 
@@ -180,13 +180,13 @@ void MyData::ReadData()
 {
     ifstream fin;
     fin.open("data.txt");
-    int height, width;
-    fin >> height >> width;
+    int row, col;
+    fin >> row >> col;
 
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < row; i++)
     {
         vector<int> temp;
-        for (int j = 0; j < width; j++)
+        for (int j = 0; j < col; j++)
         {
             int n;
             fin >> n;
@@ -194,8 +194,6 @@ void MyData::ReadData()
         }
         num.push_back(temp);
     }
-    InitialHash();
-    CreateHash();
     CreateMap();
     CopyNum();
     fin.close();
@@ -203,19 +201,18 @@ void MyData::ReadData()
 
 void MyData::SaveData()
 {
-    ofstream fout;
-    fout.open("data.txt");
-    fout << num.size() << " " << num[0].size() << endl;
+    ofstream outfile("output.txt");
+    outfile << num.size() << " " << num[0].size() << endl;
     for (int i = 0; i < num.size(); i++)
     {
         for (int j = 0; j < num[0].size(); j++)
         {
-            fout << setw(2) << left << num[i][j] << " ";
+            outfile << left << setw(2) << num[i][j] << " ";
         }
-        fout << endl;
+        outfile << endl;
     }
-    fout.close();
-    cout << "save successfully ！" << endl;
+    outfile.close();
+    cout << "save successfully ! " << endl;
 }
 
 void MyData::PrintData(vector<vector<int> > num)
@@ -224,7 +221,7 @@ void MyData::PrintData(vector<vector<int> > num)
     {
         for (int j = 0; j < num[0].size(); j++)
         {
-            cout << setw(2) << left << num[i][j] << " ";
+            cout << left << setw(2) << num[i][j] << " ";
         }
         cout << endl;
     }
@@ -236,32 +233,16 @@ void MyData::PrintDataLie(vector<vector<int> > numLie)
     {
         for (int j = 0; j < num[0].size(); j++)
         {
-            cout << setw(2) << left << numLie[j][i] << " ";
+            cout << left << setw(2) << numLie[j][i] << " ";
         }
         cout << endl;
     }
 }
 
-void MyData::InitialHash()
-{
-    for (int i = 0; i < num.size() * num[0].size(); i++)
-    {
-        hash.push_back(0);
-    }
-}
-
-void MyData::CreateHash()
-{
-    for (int i = 0; i < num.size(); i++)
-        for (int j = 0; j < num[0].size(); j++)
-        {
-            hash[i * num.size() + j] = num[i][j];
-        }
-}
-
+// only for the consistent of the program, have not finished the hashing part yet. 
 int MyData::Search(int x, int y)
 {
-    return hash[x * num.size() + y];
+     return num[x][y];
 }
 
 void MyData::Update(int x, int y, int newNum)
